@@ -1,0 +1,17 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+table {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: rgb(51, 50, 50);
+  border-collapse: collapse;
+}
+
+th {
+  background-color: rgb(23, 21, 21);
+}
