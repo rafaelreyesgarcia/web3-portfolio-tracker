@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { Table } from '@web3uikit/core'
+import { Reload } from '@web3uikit/icons'
 
 const Tokens = ({wallet, chain, tokens, setTokens}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,40 +31,21 @@ const Tokens = ({wallet, chain, tokens, setTokens}) => {
 
   return (
     <>
-      <div>
-        <span>ERC-20 Tokens</span>
-        <button onClick={getTokenBalances}>Get Tokens</button>
-        <br />
-        <table>
-          <tbody>
-            <tr>
-              <th>NAME</th>
-              <th>SYMBOL</th>
-              <th>BALANCE</th>
-              <th>PRICE</th>
-              <th>TOTAL</th>
-            </tr>
-            {isLoading ?
-              <>
-                <div>loading...</div>
-              </> : (
-              tokens.length > 0 && tokens.map((token) => {
-                return (
-                  <>
-                    <tr key={token.name}>
-                      <td>{token.name}</td>
-                      <td>{token.symbol}</td>
-                      <td>{(Number(token.balance) / Number(`1E${token.decimals}`)).toLocaleString('en-US')}</td>
-                      <td>{(token.value).toFixed(2)}</td>
-                      <td>{Number(((Number(token.balance) / Number(`1E${token.decimals}`)) * (token.value)).toFixed(2)).toLocaleString('en-US')}</td>
-                    </tr>
-                  </>
-                )})
-              )}
-          </tbody>
-        </table>
-        
-      </div>
+      <div>ERC20 Tokens <Reload onClick={getTokenBalances}/></div>
+      {tokens.length > 0 && (
+        <Table
+          pageSize={6}
+          noPagination={true}
+          style={{width: '900px'}}
+          columnsConfig='300px 300px 250px'
+          data={tokens.map(e => [e.symbol, e.balance, `$${e.value}`])}
+          header={[
+            <span>Currency</span>,
+            <span>Balance</span>,
+            <span>Value</span>
+          ]}
+        />
+      )}
     </>
   )
 }
