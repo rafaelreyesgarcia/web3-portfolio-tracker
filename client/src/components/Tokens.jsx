@@ -15,7 +15,7 @@ const Tokens = ({wallet, chain, tokens, setTokens}) => {
 
     if(response.data) {
       let t = response.data;
-      console.log(t);
+      console.log('axios response:', t);
 
       // for (let i = 0; i < t.length; i++) {
       //   t[i].balance = (Number(t[i].nativePrice.value)) / (Number(`1E${t[i].nativePrice.decimals}`)).toFixed(3); //1E18

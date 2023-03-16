@@ -3,15 +3,15 @@ const app = express()
 const cors = require('cors')
 // const { default: Moralis } = require('moralis')
 const Moralis = require('moralis').default;
-const {EvmChain} = require('@moralisweb3/common-evm-utils')
+// const {EvmChain} = require('@moralisweb3/common-evm-utils')
 const port = 8080
 require('dotenv').config()
 
 app.use(cors())
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
-const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
-const activeChain = EvmChain.POLYGON
+// const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
+// const activeChain = EvmChain.POLYGON
 
 app.get('/', (req, res) => {
   console.log('get request...')
@@ -41,16 +41,16 @@ app.get('/nativeBalance', async (req, res) => {
     // console.log(nativeBalance)
 
     let nativeCurrency;
-    if (activeChain.hex === '0x1') {
+    if (chain == '0x1') {
       nativeCurrency = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
-    } else if (activeChain.hex === '0x89') {
+    } else if (chain == '0x89') {
       nativeCurrency = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270';
     }
     // console.log(nativeCurrency)
 
     const tokenResponse = await Moralis.EvmApi.token.getTokenPrice({
       address: nativeCurrency,
-      chain: activeChain
+      chain: chain
     })
     const usdPrice = tokenResponse.result.usdPrice;
 
@@ -95,7 +95,7 @@ app.get('/tokenBalances', async (req, res) => {
           address: tokens[i].token_address,
           chain: chain,
         });
-  
+
         const price = priceResponse?.result
         // console.log(price)
 
@@ -122,6 +122,68 @@ app.get('/tokenBalances', async (req, res) => {
     res.send(err);
   }
 })
+
+app.get('/tokenTransfers', async (req, res) => {
+  const { address, chain} = req.query
+  console.log(address, chain);
+  // console.log(typeof chain);
+
+  try {
+
+    console.log('processing token transfers request...');
+
+    const response = await Moralis.EvmApi.token.getWalletTokenTransfers({
+      address: address,
+      chain: chain,
+    })
+    let userTransactions = response.raw.result;
+
+    let transactionsDetails = [];
+
+    for (let i = 0; i < userTransactions.length; i++) {
+
+      const metaResponse = await Moralis.EvmApi.token.getTokenMetadata({
+        addresses: [userTransactions[i].address],
+        chain: chain,
+      });
+
+      console.log(metaResponse.raw[0])
+
+      if (metaResponse.raw) {
+        userTransactions[i].decimals = metaResponse.raw[0].decimals;
+        userTransactions[i].symbol = metaResponse.raw[0].symbol;
+        userTransactions[i].logo = metaResponse.raw[0].logo;
+        transactionsDetails.push(userTransactions[i])
+      }
+    }
+
+    console.log(`${transactionsDetails.length} transfers`)
+    console.log('sending response...')
+    res.send(transactionsDetails)
+  } catch (err) {
+    res.send(err);
+  }
+})
+
+app.get('/nftBalance', async (req, res) => {
+  const { address, chain} = req.query
+  console.log(address, chain);
+
+  try {
+    console.log('processing nft balance request...');
+
+    const response = await Moralis.EvmApi.nft.getWalletNFTs({
+      address: address,
+      chain: chain,
+    })
+    console.log('sending response...')
+    res.send(response)
+  } catch (err) {
+    res.send(err);
+  }
+})
+
+
 
 // Moralis.start({
 //   apiKey: MORALIS_API_KEY

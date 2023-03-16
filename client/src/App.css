@@ -1,9 +1,11 @@
-#root {
+
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
+} */
+
 
 table {
   margin-top: 1rem;
@@ -14,4 +16,30 @@ table {
 
 th {
   background-color: rgb(23, 21, 21);
+}
+
+.header {
+  height: 80px;
+  /* width: calc(100vw - 100px); */
+  display: flex;
+  justify-content: flex-start;
+  background-color: rgb(33, 33, 38);
+  /* border-bottom: 1px solid rgb(121, 121, 121); */
+  padding: 5px 20px;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  gap: 25px;
+}
+
+.wallet-inputs {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
+  gap: 25px;
 }

@@ -9,7 +9,7 @@ const NativeTokens = ({
   setNativeBalance,
   setNativeValue
 }) => {
-  
+
   async function getNativeBalance() {
 
     const response = await axios.get('http://localhost:8080/nativeBalance', {
@@ -23,7 +23,7 @@ const NativeTokens = ({
 
     if (response.data.nativeBalance && response.data.usdPrice ) {
       setNativeBalance(Number(response.data.nativeBalance))
-      setNativeValue(Number(response.data.nativeBalance) * response.data.usdPrice)
+      setNativeValue(Number(response.data.nativeBalance) * Number(response.data.usdPrice))
     }
 
   }
