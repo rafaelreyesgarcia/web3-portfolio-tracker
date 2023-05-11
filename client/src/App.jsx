@@ -18,6 +18,7 @@ function App() {
   const [transfers, setTransfers] = useState([])
   const [nfts, setNfts] = useState([])
   const [filteredNfts, setFilteredNfts] = useState([])
+
   // async function backendCall() {
   //   const response = await axios.get('http://localhost:8080');
   //   console.log(response);
@@ -25,47 +26,67 @@ function App() {
   console.log('wallet', wallet)
   console.log('chain', chain)
 
+
   return (
     <div className='App'>
-      {/* <button onClick={backendCall}>fetch hello</button> */}
       <WalletInputs
         wallet={wallet}
         chain={chain}
         setWallet={setWallet}
         setChain={setChain}
       />
-      <NativeTokens
-        wallet={wallet}
-        chain={chain}
-        nativeBalance={nativeBalance}
-        nativeValue={nativeValue}
-        setNativeBalance={setNativeBalance}
-        setNativeValue={setNativeValue}
-      />
-      <Tokens
-        wallet={wallet}
-        chain={chain}
-        tokens={tokens}
-        setTokens={setTokens}
-      />
-      <PortfolioValue
-        nativeValue={nativeValue}
-        tokens={tokens}
-      />
-      <TransferHistory
-        chain={chain}
-        wallet={wallet}
-        transfers={transfers}
-        setTransfers={setTransfers}
-      />
-      <Nfts
-        wallet={wallet}
-        chain={chain}
-        nfts={nfts}
-        setNfts={setNfts}
-        filteredNfts={filteredNfts}
-        setFilteredNfts={setFilteredNfts}
-      />
+      <div className='content'>
+        {wallet.length === 42 && (
+          <>
+            <div>
+              <Avatar isRounded size={130} theme='image' />
+              <h2>{`${wallet.slice(0, 6)}...${wallet.slice(36)}`}</h2>
+            </div>
+            <PortfolioValue
+              nativeValue={nativeValue}
+              tokens={tokens}
+            />
+          </>
+        )}
+        <TabList>
+          <Tab tabKey={1} tabName={'Tokens'}>
+            <NativeTokens
+              wallet={wallet}
+              chain={chain}
+              nativeBalance={nativeBalance}
+              nativeValue={nativeValue}
+              setNativeBalance={setNativeBalance}
+              setNativeValue={setNativeValue}
+            />
+            <Tokens
+              wallet={wallet}
+              chain={chain}
+              tokens={tokens}
+              setTokens={setTokens}
+            />
+
+          </Tab>
+          <Tab tabKey={2} tabName={'Transfers'}>
+            <TransferHistory
+              chain={chain}
+              wallet={wallet}
+              transfers={transfers}
+              setTransfers={setTransfers}
+            />
+          </Tab>
+          <Tab tabKey={3} tabName={'NFTs'}>
+            <Nfts
+              wallet={wallet}
+              chain={chain}
+              nfts={nfts}
+              setNfts={setNfts}
+              filteredNfts={filteredNfts}
+              setFilteredNfts={setFilteredNfts}
+            />
+          </Tab>
+        </TabList>
+      </div>
+      
     </div>
   )
 }

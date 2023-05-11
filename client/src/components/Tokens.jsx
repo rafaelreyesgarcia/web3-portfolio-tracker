@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Loading, Table } from '@web3uikit/core'
+import { Reload } from '@web3uikit/icons'
 
 const Tokens = ({wallet, chain, tokens, setTokens}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,43 +28,43 @@ const Tokens = ({wallet, chain, tokens, setTokens}) => {
     }
     setIsLoading(false);
   }
+  console.log(tokens);
 
   return (
     <>
-      <div>
-        <span>ERC-20 Tokens</span>
-        <button onClick={getTokenBalances}>Get Tokens</button>
-        <br />
-        <table>
-          <tbody>
-            <tr>
-              <th>NAME</th>
-              <th>SYMBOL</th>
-              <th>BALANCE</th>
-              <th>PRICE</th>
-              <th>TOTAL</th>
-            </tr>
-            {isLoading ?
-              <>
-                <div>loading...</div>
-              </> : (
-              tokens.length > 0 && tokens.map((token) => {
-                return (
-                  <>
-                    <tr key={token.name}>
-                      <td>{token.name}</td>
-                      <td>{token.symbol}</td>
-                      <td>{(Number(token.balance) / Number(`1E${token.decimals}`)).toLocaleString('en-US')}</td>
-                      <td>{(token.value).toFixed(2)}</td>
-                      <td>{Number(((Number(token.balance) / Number(`1E${token.decimals}`)) * (token.value)).toFixed(2)).toLocaleString('en-US')}</td>
-                    </tr>
-                  </>
-                )})
-              )}
-          </tbody>
-        </table>
-        
-      </div>
+      <div> <button onClick={getTokenBalances}>ERC20 Tokens</button> <Reload onClick={getTokenBalances}/></div>
+      {isLoading ? (
+        <div
+          style={{
+            backgroundColor: '#ECECFE',
+            borderRadius: '8px',
+            padding: '20px'
+          }}
+        >
+          <Loading
+            fontSize={12}
+            size={12}
+            spinnerColor='#2E7DAF'
+            spinnerType='wave'
+            text='loading token balance...'
+          />
+        </div>
+      ) : (
+        tokens.length > 0 &&
+        <Table
+          pageSize={6}
+          noPagination={true}
+          // style={{width: '500px'}}
+          columnsConfig='300px 300px 250px 250px'
+          data={tokens.map(e => [e.symbol, (Number(e.balance) / Number(`1E${e.decimals}`)), e.value.toFixed(2), ((Number(e.balance) / Number(`1E${e.decimals}`)) * e.value) ])}
+          header={[
+            <span>Currency</span>,
+            <span>Balance</span>,
+            <span>Price</span>,
+            <span>Value</span>
+          ]}
+        />
+      )}
     </>
   )
 }

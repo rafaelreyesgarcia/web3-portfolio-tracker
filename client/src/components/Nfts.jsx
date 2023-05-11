@@ -1,13 +1,17 @@
 import React from 'react'
 import axios from 'axios'
 import {useState, useEffect} from 'react'
+import { Reload } from '@web3uikit/icons'
+import { Input, Loading } from '@web3uikit/core'
 
 const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const [nameFilter, setNameFilter] = useState('')
   const [idFilter, setIdFilter] = useState('')
 
   async function getUserNfts() {
+    setIsLoading(true);
     const response = await axios.get('http://localhost:8080/nftBalance', {
       params: {
         address: wallet,
@@ -41,6 +45,7 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
 
     setNfts(t);
     setFilteredNfts(t)
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -80,35 +85,58 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
 
   return (
     <>
-      <h2>NFTs</h2>
-      <div>
-        <button onClick={getUserNfts}>Fetch NFTs</button>
-        <span>name filter</span>
-        <input
-          onChange={(e) => setNameFilter(e.target.value)}
+      <div className='tab-heading'>
+        <button onClick={getUserNfts}>NFT Portfolio</button> <Reload onClick={getUserNfts}/>
+      </div>
+      <div className='nft-inputs'>
+        <Input
+          id='nameF'
+          label='Name Filter'
+          labelBgColor='rgb(33, 33, 38)'
           value={nameFilter}
+          style={{}}
+          onChange={(e)  => setNameFilter(e.target.value)}
         />
-
-        <span>Id filter</span>
-        <input
-          onChange={(e) => setIdFilter(e.target.value)}
+        <Input
+          id='idF'
+          label='ID Filter'
+          labelBgColor='rgb(33, 33, 38)'
           value={idFilter}
+          style={{}}
+          onChange={(e)  => setIdFilter(e.target.value)}
         />
-        <br />
-        {filteredNfts.length > 0 &&
-          filteredNfts.map((e, i) => {
+      </div>
+      <div className='nft-list'>
+        {isLoading ? (
+          <div
+            style={{
+              backgroundColor: '#ECECFE',
+              borderRadius: '8px',
+              padding: '20px'
+            }}
+          >
+            <Loading
+              fontSize={12}
+              size={12}
+              spinnerColor='#2E7DAF'
+              spinnerType='wave'
+              text='loading NFT collection...'
+            />
+          </div>
+        ) : (
+          filteredNfts.length > 0 &&
+          filteredNfts.map((e) => {
             return (
-              <div>
-                <span>{i}</span>
-                {!e.image && <span>NO IMAGE</span>}
-                {e.image && <img src={e.image} width={200} />}
-                <span>Name: {e.name}</span>
-                <span>ID - {e.token_id}</span>
-                <br />
-              </div>
+              <>
+                <div className='nft-info'>
+                  {e.image && <img src={e.image} width={200} />}
+                  <div>Name: {e.name}</div>
+                  <div>Id: {e.token_id.slice(0, 5)}</div>
+                </div>
+              </>
             )
           })
-        }
+        ) }
       </div>
     </>
   )

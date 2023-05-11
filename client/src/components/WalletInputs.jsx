@@ -3,6 +3,7 @@ import '../App.css'
 import {Input, Select, CryptoLogos} from '@web3uikit/core'
 
 const WalletInputs = ({chain, wallet, setChain, setWallet}) => {
+
   return (
     <>
       <div className='header'>
@@ -15,10 +16,11 @@ const WalletInputs = ({chain, wallet, setChain, setWallet}) => {
             labelBgColor='rgb(33, 33, 38)'
             value={wallet}
             style={{height: '50px'}}
+            hasCopyButton={true}
             onChange={(e) => setWallet(e.target.value)}
           />
 
-          <Select 
+          <Select
             defaultOptionIndex={0}
             id='Chain'
             onChange={(e) => setChain(e.value)}
@@ -37,11 +39,11 @@ const WalletInputs = ({chain, wallet, setChain, setWallet}) => {
                 prefix: <CryptoLogos chain='polygon'/>
               }
             ]}
-            className={['sc-dFdIVH', 'sc-hKdnnL']}
+            // className={['sc-dFdIVH', 'sc-hKdnnL']}
           />
         </div>
       </div>
-      
+
     </>
   )
 }
