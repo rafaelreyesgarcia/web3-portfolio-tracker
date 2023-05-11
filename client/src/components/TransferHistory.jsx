@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-import { Table } from '@web3uikit/core'
+import { Loading, Table } from '@web3uikit/core'
 import { Reload } from '@web3uikit/icons'
 
 const TransferHistory = ({chain, wallet, transfers, setTransfers}) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   async function getTokenTransfers() {
+    setIsLoading(true)
     const response = await axios.get('http://localhost:8080/tokenTransfers', {
       params: {
         address: wallet,
@@ -16,14 +18,32 @@ const TransferHistory = ({chain, wallet, transfers, setTransfers}) => {
     if (response.data) {
       setTransfers(response.data);
     }
+    setIsLoading(false)
   }
 
   console.log('transfers: ', transfers);
   return (
     <>
-      <div className='tab-heading'>Transfer History <Reload onClick={getTokenTransfers}/></div>
+      <div className='tab-heading'><button onClick={getTokenTransfers}>Transfer History</button> <Reload onClick={getTokenTransfers}/></div>
       <div>
-        {transfers.length > 0 && (
+        {isLoading ? (
+          <div
+            style={{
+              backgroundColor: '#ECECFE',
+              borderRadius: '8px',
+              padding: '20px'
+            }}
+          >
+            <Loading
+              fontSize={12}
+              size={12}
+              spinnerColor='#2E7DAF'
+              spinnerType='wave'
+              text='loading transfer history...'
+            />
+          </div>
+        ) : (
+          transfers.length > 0 &&
           <Table
             pageSize={8}
             noPagination={false}

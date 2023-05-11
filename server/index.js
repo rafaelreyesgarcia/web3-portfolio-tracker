@@ -137,6 +137,7 @@ app.get('/tokenTransfers', async (req, res) => {
       chain: chain,
     })
     let userTransactions = response.raw.result;
+    console.log(userTransactions)
 
     let transactionsDetails = [];
 
@@ -147,7 +148,7 @@ app.get('/tokenTransfers', async (req, res) => {
         chain: chain,
       });
 
-      console.log(metaResponse.raw[0])
+      // console.log(metaResponse.raw)
 
       if (metaResponse.raw) {
         userTransactions[i].decimals = metaResponse.raw[0].decimals;

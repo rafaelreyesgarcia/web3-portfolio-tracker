@@ -2,14 +2,16 @@ import React from 'react'
 import axios from 'axios'
 import {useState, useEffect} from 'react'
 import { Reload } from '@web3uikit/icons'
-import { Input } from '@web3uikit/core'
+import { Input, Loading } from '@web3uikit/core'
 
 const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const [nameFilter, setNameFilter] = useState('')
   const [idFilter, setIdFilter] = useState('')
 
   async function getUserNfts() {
+    setIsLoading(true);
     const response = await axios.get('http://localhost:8080/nftBalance', {
       params: {
         address: wallet,
@@ -43,6 +45,7 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
 
     setNfts(t);
     setFilteredNfts(t)
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -83,9 +86,9 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
   return (
     <>
       <div className='tab-heading'>
-        NFT Portfolio <Reload onClick={getUserNfts}/>
+        <button onClick={getUserNfts}>NFT Portfolio</button> <Reload onClick={getUserNfts}/>
       </div>
-      <div>
+      <div className='nft-inputs'>
         <Input
           id='nameF'
           label='Name Filter'
@@ -102,11 +105,26 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
           style={{}}
           onChange={(e)  => setIdFilter(e.target.value)}
         />
-
-        
       </div>
       <div className='nft-list'>
-        {filteredNfts.length > 0 &&
+        {isLoading ? (
+          <div
+            style={{
+              backgroundColor: '#ECECFE',
+              borderRadius: '8px',
+              padding: '20px'
+            }}
+          >
+            <Loading
+              fontSize={12}
+              size={12}
+              spinnerColor='#2E7DAF'
+              spinnerType='wave'
+              text='loading NFT collection...'
+            />
+          </div>
+        ) : (
+          filteredNfts.length > 0 &&
           filteredNfts.map((e) => {
             return (
               <>
@@ -118,7 +136,7 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
               </>
             )
           })
-        }
+        ) }
       </div>
     </>
   )

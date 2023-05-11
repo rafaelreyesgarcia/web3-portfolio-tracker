@@ -18,12 +18,14 @@ function App() {
   const [transfers, setTransfers] = useState([])
   const [nfts, setNfts] = useState([])
   const [filteredNfts, setFilteredNfts] = useState([])
+
   // async function backendCall() {
   //   const response = await axios.get('http://localhost:8080');
   //   console.log(response);
   // }
   console.log('wallet', wallet)
   console.log('chain', chain)
+
 
   return (
     <div className='App'>
@@ -46,7 +48,6 @@ function App() {
             />
           </>
         )}
-        
         <TabList>
           <Tab tabKey={1} tabName={'Tokens'}>
             <NativeTokens
@@ -63,7 +64,7 @@ function App() {
               tokens={tokens}
               setTokens={setTokens}
             />
-            
+
           </Tab>
           <Tab tabKey={2} tabName={'Transfers'}>
             <TransferHistory

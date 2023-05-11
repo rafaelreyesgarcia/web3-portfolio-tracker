@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import axios from 'axios'
-import { Table } from '@web3uikit/core'
+import { Table, Loading } from '@web3uikit/core'
 import { Reload } from '@web3uikit/icons'
 
 const NativeTokens = ({
@@ -9,11 +9,15 @@ const NativeTokens = ({
   nativeBalance,
   nativeValue,
   setNativeBalance,
-  setNativeValue
+  setNativeValue,
 }) => {
 
   const [native, setNative] = useState(null)
+  const [isLoading, setIsLoading] = useState(false);
+
   async function getNativeBalance() {
+
+    setIsLoading(true)
 
     const response = await axios.get('http://localhost:8080/nativeBalance', {
       params: {
@@ -30,29 +34,45 @@ const NativeTokens = ({
     }
     const native = chain === '0x1' ? 'ETH': 'MATIC'
     setNative(native)
-
+    setIsLoading(false)
   }
   // console.log(nativeBalance)
   return (
     <>
       <div className='tab-heading'>
-        Native Balance <Reload onClick={getNativeBalance}/>
+        <button onClick={getNativeBalance}>Native Balance</button> <Reload onClick={getNativeBalance}/>
       </div>
-      {nativeBalance > 0 && nativeValue > 0 &&
-
+      {isLoading ? (
+        <div
+          style={{
+            backgroundColor: '#ECECFE',
+            borderRadius: '8px',
+            padding: '20px'
+          }}
+        >
+          <Loading
+            fontSize={12}
+            size={12}
+            spinnerColor='#2E7DAF'
+            spinnerType='wave'
+            text='loading native balance...'
+          />
+        </div>
+      ) : (
+        nativeBalance > 0 && nativeValue > 0 && wallet.length === 42 &&
         <Table
           pageSize={1}
           noPagination={true}
-          style={{width: '900px'}}
-          columnsConfig='300px 300px 250px'
-          data={[[`${native}`, nativeBalance, `$${nativeValue}`]]}
+          // style={{width: '900px'}}
+          columnsConfig='100px 200px 200px'
+          data={[[native, nativeBalance, nativeValue]]}
           header={[
             <span>Currency</span>,
             <span>Balance</span>,
             <span>Value</span>
           ]}
         />
-      } 
+      )}
     </>
   )
 }

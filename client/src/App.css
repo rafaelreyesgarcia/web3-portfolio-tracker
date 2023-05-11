@@ -27,6 +27,7 @@ th {
   /* border-bottom: 1px solid rgb(121, 121, 121); */
   padding: 5px 20px;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .title {
@@ -68,6 +69,13 @@ th {
   background-color: rgb(42, 42, 47);
   border-radius: 5px;
   padding: 10px;
+}
+
+.nft-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-block: 2rem;
 }
 
 .total-value {
