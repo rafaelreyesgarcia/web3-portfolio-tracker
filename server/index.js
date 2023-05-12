@@ -7,9 +7,9 @@ const Moralis = require('moralis').default;
 const port = process.env.PORT
 require('dotenv').config()
 
-app.use(cors({
-  origin: '*'
-}))
+// app.use(cors({
+//   origin: '*'
+// }))
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
 // const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('hello!')
 })
 
-app.get('/nativeBalance', async (req, res) => {
+app.get('/nativeBalance', cors(), async (req, res) => {
   try {
     // query
     // localhost:8080/nativeBalance?address=***&chain=***
@@ -58,7 +58,6 @@ app.get('/nativeBalance', async (req, res) => {
 
     const finalResponse = {nativeBalance, usdPrice}
     console.log('sending response...');
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(finalResponse);
   } catch (err) {
     res.send(err);
