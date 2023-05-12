@@ -58,6 +58,7 @@ app.get('/nativeBalance', async (req, res) => {
 
     const finalResponse = {nativeBalance, usdPrice}
     console.log('sending response...');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(finalResponse);
   } catch (err) {
     res.send(err);
