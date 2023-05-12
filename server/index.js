@@ -7,7 +7,9 @@ const Moralis = require('moralis').default;
 const port = process.env.PORT
 require('dotenv').config()
 
-app.use(cors())
+app.use(cors({
+  origin: '*'
+}))
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
 // const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
