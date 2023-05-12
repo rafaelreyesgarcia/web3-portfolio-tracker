@@ -7,15 +7,7 @@ const Moralis = require('moralis').default;
 const port = process.env.PORT
 require('dotenv').config()
 
-// app.use(cors());
-
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://web3-portfolio-tracker.vercel.app/');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
+app.use(cors());
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
 // const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
