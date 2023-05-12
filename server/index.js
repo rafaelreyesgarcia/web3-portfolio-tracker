@@ -7,9 +7,11 @@ const Moralis = require('moralis').default;
 const port = process.env.PORT
 require('dotenv').config()
 
-// app.use(cors({
-//   origin: '*'
-// }))
+const corsOptions = {
+  origin: ['https://web3-portfolio-tracker.vercel.app/'],
+};
+
+app.use(cors(corsOptions));
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
 // const testAddress = '0xef46D5fe753c988606E6F703260D816AF53B03EB'
@@ -20,7 +22,7 @@ app.get('/', (req, res) => {
   res.send('hello!')
 })
 
-app.get('/nativeBalance', cors(), async (req, res) => {
+app.get('/nativeBalance', async (req, res) => {
   try {
     // query
     // localhost:8080/nativeBalance?address=***&chain=***
