@@ -4,7 +4,7 @@ const cors = require('cors')
 // const { default: Moralis } = require('moralis')
 const Moralis = require('moralis').default;
 // const {EvmChain} = require('@moralisweb3/common-evm-utils')
-const port = 8080
+const port = process.env.PORT
 require('dotenv').config()
 
 app.use(cors())
