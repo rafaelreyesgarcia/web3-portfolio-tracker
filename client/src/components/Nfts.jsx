@@ -12,7 +12,7 @@ const Nfts = ({chain, wallet, nfts, setNfts, filteredNfts, setFilteredNfts}) => 
 
   async function getUserNfts() {
     setIsLoading(true);
-    const response = await axios.get('http://localhost:8080/nftBalance', {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER}/nftBalance`, {
       params: {
         address: wallet,
         chain: chain,

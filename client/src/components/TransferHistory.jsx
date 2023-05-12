@@ -8,7 +8,7 @@ const TransferHistory = ({chain, wallet, transfers, setTransfers}) => {
 
   async function getTokenTransfers() {
     setIsLoading(true)
-    const response = await axios.get('http://localhost:8080/tokenTransfers', {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER}/tokenTransfers`, {
       params: {
         address: wallet,
         chain: chain

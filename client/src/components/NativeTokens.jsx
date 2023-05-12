@@ -19,7 +19,7 @@ const NativeTokens = ({
 
     setIsLoading(true)
 
-    const response = await axios.get('http://localhost:8080/nativeBalance', {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER}/nativeBalance`, {
       params: {
         address: wallet,
         chain: chain,

@@ -8,7 +8,7 @@ const Tokens = ({wallet, chain, tokens, setTokens}) => {
 
   async function getTokenBalances() {
     setIsLoading(true);
-    const response = await axios.get('http://localhost:8080/tokenBalances', {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER}/tokenBalances`, {
       params: {
         address: wallet,
         chain: chain,
